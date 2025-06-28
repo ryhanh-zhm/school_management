@@ -9,12 +9,12 @@ def load_data(filename):
         return {}
     try:
         with open(file_path, 'r') as f:
-            content = f.read().strip()  # Read and strip whitespace
-            if not content:  # If file is empty
+            content = f.read().strip()  
+            if not content: 
                 return {}
             return json.load(f)
     except json.JSONDecodeError:
-        return {}  # Return empty dict if JSON is invalid
+        return {} 
 
 def save_data(filename, data):
     if not os.path.exists(DATA_DIR):

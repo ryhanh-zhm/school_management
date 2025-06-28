@@ -2,6 +2,8 @@
 from utils.data_manager import load_data, save_data
 from models.student import Student
 import time
+import os
+import json
 
 class Classroom:
     def __init__(self, class_id):
@@ -13,9 +15,17 @@ class Classroom:
         students = load_data("students.json")
         student_data = students.get(student_id)
         if not student_data:
-            # Retry loading in case of timing issue
-            time.sleep(0.1)  # Small delay to allow file write to complete
-            students = load_data("students.json")
+            # Retry loading in case of timing or file handle issue
+            time.sleep(0.2)  # Delay to ensure file write completes
+            # Force reload by re-reading the file
+            file_path = os.path.join("data", "students.json")
+            with open(file_path, 'r') as f:
+                content = f.read().strip()
+                if content:
+                    f.seek(0)  # Reset pointer to start before loading
+                    students = json.load(f)
+                else:
+                    students = {}
             student_data = students.get(student_id)
             if not student_data:
                 raise ValueError("Student not found")
