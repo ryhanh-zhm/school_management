@@ -1,5 +1,7 @@
+# models/classroom.py
 from utils.data_manager import load_data, save_data
 from models.student import Student
+import time
 
 class Classroom:
     def __init__(self, class_id):
@@ -11,7 +13,12 @@ class Classroom:
         students = load_data("students.json")
         student_data = students.get(student_id)
         if not student_data:
-            raise ValueError("Student not found")
+            # Retry loading in case of timing issue
+            time.sleep(0.1)  # Small delay to allow file write to complete
+            students = load_data("students.json")
+            student_data = students.get(student_id)
+            if not student_data:
+                raise ValueError("Student not found")
         if student_data.get("classroom_id"):
             raise ValueError("Student already in a class")
         self.students.append(student_id)

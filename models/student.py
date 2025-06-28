@@ -47,6 +47,6 @@ class Student(User):
         students = load_data("students.json")
         students[self.id] = self.__dict__
         save_data("students.json", students)
-        # Debug: Confirm save
+        
         with open("data/students.json", "r") as f:
             print(f"Students.json content after save: {f.read()}")
