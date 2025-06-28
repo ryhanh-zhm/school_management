@@ -8,8 +8,12 @@ class Parent(User):
 
     def view_student_dashboard(self):
         students = load_data("students.json")
-        student = students.get(self.student_id)
-        if not student:
+        student_data = students.get(self.student_id)
+        if not student_data:
             raise ValueError("Student not found")
-        return student["grades"], student["disciplinary_records"]
-    
+        return {
+            "username": student_data["username"],
+            "classroom_id": student_data.get("classroom_id"),
+            "grades": student_data.get("grades", {}),
+            "disciplinary_records": student_data.get("disciplinary_records", [])
+        }

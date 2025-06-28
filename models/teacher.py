@@ -16,12 +16,10 @@ class Teacher(User):
         student_data = next((s for s in students.values() if s["id"] == student_id), None)
         if not student_data:
             raise ValueError("Student not found")
-        
         if course_id not in self.courses:
             raise ValueError("Teacher not assigned to this course")
-        
         student_obj = Student(student_data["username"], student_data["parent_username"])
-        student_obj.id = student_data["id"]  
+        student_obj.id = student_data["id"]
         student_obj.classroom_id = student_data.get("classroom_id")
         student_obj.grades = student_data.get("grades", {})
         student_obj.disciplinary_records = student_data.get("disciplinary_records", [])
